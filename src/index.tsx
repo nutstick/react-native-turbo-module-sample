@@ -1,9 +1,14 @@
-import { NativeModules } from 'react-native';
+import { TurboModuleRegistry } from 'react-native-tscodegen-types';
+import type { TurboModule } from 'react-native-tscodegen-types';
 
-type TurboModuleSampleType = {
-  multiply(a: number, b: number): Promise<number>;
-};
+export interface Spec extends TurboModule {
+  getString(name: string): string;
+  getArray(name: string): ReadonlyArray<string>;
+  getObject(name: string): Object;
+  getPromise(name: string): Promise<string>;
+  addListener(cb: (name: string) => void): void;
+}
 
-const { TurboModuleSample } = NativeModules;
-
-export default TurboModuleSample as TurboModuleSampleType;
+export default TurboModuleRegistry.getEnforcing<Spec>(
+  'MySampleTurboModule'
+) as Spec;

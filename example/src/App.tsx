@@ -4,15 +4,9 @@ import { StyleSheet, View, Text } from 'react-native';
 import TurboModuleSample from 'react-native-turbo-module-sample';
 
 export default function App() {
-  const [result, setResult] = React.useState<number | undefined>();
-
-  React.useEffect(() => {
-    TurboModuleSample.multiply(3, 7).then(setResult);
-  }, []);
-
   return (
     <View style={styles.container}>
-      <Text>Result: {result}</Text>
+      <Text>Result: {TurboModuleSample.getString('nutstick')}</Text>
     </View>
   );
 }
