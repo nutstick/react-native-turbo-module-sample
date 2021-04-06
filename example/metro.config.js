@@ -7,7 +7,7 @@ const root = path.resolve(__dirname, '..');
 
 const modules = Object.keys({
   ...pak.peerDependencies,
-});
+}).concat(['react-native-tscodegen-types/node_modules/react-native']);
 
 module.exports = {
   projectRoot: __dirname,

@@ -1,0 +1,10 @@
+{
+  "libraryName": "MySampleTurboModule",
+  "outputDirectory": "./spec",
+  "moduleSpecName": "MySampleTurboModuleSpec",
+  "generators": [
+      "modulesAndroid",
+      "modulesIOS"
+  ],
+  "inputFile": "./src/index.tsx"
+}
