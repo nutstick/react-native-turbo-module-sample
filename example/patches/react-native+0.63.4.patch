@@ -1,0 +1,50 @@
+diff --git a/node_modules/react-native/third-party-podspecs/Folly.podspec b/node_modules/react-native/third-party-podspecs/Folly.podspec
+index 35a0522..10c3008 100644
+--- a/node_modules/react-native/third-party-podspecs/Folly.podspec
++++ b/node_modules/react-native/third-party-podspecs/Folly.podspec
+@@ -13,6 +13,7 @@ Pod::Spec.new do |spec|
+   spec.source = { :git => 'https://github.com/facebook/folly.git',
+                   :tag => "v#{spec.version}" }
+   spec.module_name = 'folly'
++  spec.header_mappings_dir = '.'
+   spec.dependency 'boost-for-react-native'
+   spec.dependency 'DoubleConversion'
+   spec.dependency 'glog'
+@@ -36,7 +37,19 @@ Pod::Spec.new do |spec|
+                       'folly/lang/CString.cpp',
+                       'folly/memory/detail/MallocImpl.cpp',
+                       'folly/net/NetOps.cpp',
+-                      'folly/portability/SysUio.cpp'
++                      'folly/portability/SysUio.cpp',
++                      'folly/*.h',
++                      'folly/container/*.h',
++                      'folly/container/detail/*.h',
++                      'folly/detail/*.h',
++                      'folly/functional/*.h',
++                      'folly/hash/*.h',
++                      'folly/lang/*.h',
++                      'folly/memory/*.h',
++                      'folly/memory/detail/*.h',
++                      'folly/net/*.h',
++                      'folly/net/detail/*.h',
++                      'folly/portability/*.h'
+ 
+   # workaround for https://github.com/facebook/react-native/issues/14326
+   spec.preserve_paths = 'folly/*.h',
+@@ -56,6 +69,9 @@ Pod::Spec.new do |spec|
+                                "CLANG_CXX_LANGUAGE_STANDARD" => "c++14",
+                                "HEADER_SEARCH_PATHS" => "\"$(PODS_TARGET_SRCROOT)\" \"$(PODS_ROOT)/boost-for-react-native\" \"$(PODS_ROOT)/DoubleConversion\"" }
+ 
++  # TODO: The boost spec should really be selecting these files so that dependents of Folly can also access the required headers.
++  spec.user_target_xcconfig = { "HEADER_SEARCH_PATHS" => "\"$(PODS_ROOT)/boost-for-react-native\"" }
++
+   spec.default_subspec = 'Default'
+ 
+   spec.subspec 'Default' do
+@@ -75,5 +91,5 @@ Pod::Spec.new do |spec|
+   end
+ 
+   # Pinning to the same version as React.podspec.
+-  spec.platforms = { :ios => "10.0", :tvos => "10.0" }
++  spec.platforms = { :ios => "9.0", :tvos => "9.0" }
+ end
