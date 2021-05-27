@@ -152,5 +152,8 @@
         }
       ]
     ]
+  },
+  "dependencies": {
+    "patch-package": "^6.4.7"
   }
 }

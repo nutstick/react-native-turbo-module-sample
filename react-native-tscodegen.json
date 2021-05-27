@@ -4,7 +4,8 @@
   "moduleSpecName": "MySampleTurboModuleSpec",
   "generators": [
       "modulesAndroid",
-      "modulesIOS"
+      "modulesIOS",
+      "modulesCxx"
   ],
   "inputFile": "./src/index.tsx"
 }

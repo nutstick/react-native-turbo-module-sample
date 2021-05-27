@@ -12,7 +12,7 @@
 
 #include <ReactCommon/JavaTurboModule.h>
 #include <ReactCommon/TurboModule.h>
-#include <jsi/jsi.h>
+#include <fbjni/fbjni.h>
 
 namespace facebook {
 namespace react {

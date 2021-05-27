@@ -6,7 +6,16 @@ import TurboModuleSample from 'react-native-turbo-module-sample';
 export default function App() {
   return (
     <View style={styles.container}>
-      <Text>Result: {TurboModuleSample.getString('nutstick')}</Text>
+      <Text>
+        Result:
+        {/* @ts-ignore */}
+        {global.mySampleTurboModule?.getString('nutstick') ?? 'not working'}
+      </Text>
+      <Text>
+        Result:
+        {/* @ts-ignore */}
+        {TurboModuleSample?.getString('nutstick') ?? 'not working'}
+      </Text>
     </View>
   );
 }

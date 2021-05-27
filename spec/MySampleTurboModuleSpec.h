@@ -44,11 +44,7 @@ namespace facebook {
      */
     class JSI_EXPORT MySampleTurboModuleSpecJSI : public ObjCTurboModule {
     public:
-      MySampleTurboModuleSpecJSI(
-        id<RCTTurboModule> instance,
-        std::shared_ptr<CallInvoker> jsInvoker,
-        std::shared_ptr<CallInvoker> nativeInvoker,
-        id<RCTTurboModulePerformanceLogger> perfLogger);
+      MySampleTurboModuleSpecJSI(const ObjCTurboModule::InitParams &params);
     };
   } // namespace react
 } // namespace facebook

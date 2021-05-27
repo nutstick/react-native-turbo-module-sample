@@ -37,12 +37,8 @@ namespace facebook {
       return static_cast<ObjCTurboModule&>(turboModule).invokeObjCMethod(rt, VoidKind, "addListener", @selector(addListener:), args, count);
     }
 
-    MySampleTurboModuleSpecJSI::MySampleTurboModuleSpecJSI(
-      id<RCTTurboModule> instance,
-      std::shared_ptr<CallInvoker> jsInvoker,
-      std::shared_ptr<CallInvoker> nativeInvoker,
-      id<RCTTurboModulePerformanceLogger> perfLogger)
-      : ObjCTurboModule("MySampleTurboModule", instance, jsInvoker, nativeInvoker, perfLogger) {
+    MySampleTurboModuleSpecJSI::MySampleTurboModuleSpecJSI(const ObjCTurboModule::InitParams &params)
+      : ObjCTurboModule(params) {
         
         methodMap_["getString"] = MethodMetadata {1, __hostFunction_MySampleTurboModuleSpecJSI_getString};
         

@@ -2,6 +2,12 @@ apply plugin: "com.android.application"
 
 import com.android.build.OutputFile
 
+project.ext.react = [
+    root: "../../",
+    inputExcludes: ["android/**", "./**", ".gradle/**"]
+]
+
+
 /**
  * The react.gradle file registers a task for each build variant (e.g. bundleDebugJsAndAssets
  * and bundleReleaseJsAndAssets).
@@ -76,7 +82,7 @@ import com.android.build.OutputFile
  */
 
 project.ext.react = [
-    enableHermes: false,  // clean and rebuild if changing
+    enableHermes: true,  // clean and rebuild if changing
     entryFile: "index.tsx",
 ]
 
@@ -119,7 +125,17 @@ def jscFlavor = 'org.webkit:android-jsc:+'
  */
 def enableHermes = project.ext.react.get("enableHermes", false);
 
+def reactAndroidProjectDir = project(':ReactAndroid').projectDir;
+def reactAndroidBuildDir = project(':ReactAndroid').buildDir;
+
 android {
+    configurations {
+        all*.exclude module: 'fbjni-java-only'
+    }
+    dependencies {
+        implementation 'com.facebook.fbjni:fbjni:0.1.0'
+    }
+
     compileSdkVersion rootProject.ext.compileSdkVersion
 
     compileOptions {
@@ -133,7 +149,31 @@ android {
         targetSdkVersion rootProject.ext.targetSdkVersion
         versionCode 1
         versionName "1.0"
+
+        externalNativeBuild {
+            ndkBuild {
+                abiFilters "armeabi-v7a", "x86", "x86_64", "arm64-v8a"
+                arguments "APP_PLATFORM=android-21",
+                        "APP_STL=c++_shared",
+                        "NDK_TOOLCHAIN_VERSION=clang",
+                        // The following paths assume building React Native from source.
+                        "GENERATED_SRC_DIR=$buildDir/generated/source",
+                        "PROJECT_BUILD_DIR=$buildDir",
+                        "REACT_ANDROID_DIR=$reactAndroidProjectDir",
+                        "REACT_ANDROID_BUILD_DIR=$reactAndroidBuildDir"
+                cFlags "-Wall", "-Werror", "-fexceptions", "-frtti", "-DWITH_INSPECTOR=1"
+                cppFlags "-std=c++1y"
+                targets "example_reactnativeturbomodulesample_modules"
+            }
+        }
     }
+
+    externalNativeBuild {
+        ndkBuild {
+            path "$projectDir/src/main/jni/Android.mk"
+        }
+    }
+
     splits {
         abi {
             reset()
@@ -175,6 +215,30 @@ android {
             }
 
         }
+    }
+
+    def packageReactNdkLibs = tasks.register("packageReactNdkLibs", Copy) {
+        dependsOn(":ReactAndroid:packageReactNdkLibs")
+        from("$reactAndroidBuildDir/react-ndk/exported")
+        into("$buildDir/react-ndk/exported")
+    }
+
+    def cleanProjectNdkBuild = tasks.register("cleanProjectNdkBuild", Exec) {
+        ignoreExitValue(true)
+        tasks.forEach {
+            t ->
+                if (t.name.startsWith("externalNativeBuildClean")) {
+                    dependsOn(t);
+                }
+        }
+        // This .cxx folder may cause stale ndkBuild configuration.
+        // See https://stackoverflow.com/a/58288851.
+        commandLine("rm", "-rf", "$projectDir/.cxx")
+    }
+
+    afterEvaluate {
+        preBuild.dependsOn(packageReactNdkLibs)
+        clean.dependsOn(cleanProjectNdkBuild)
     }
 }
 
