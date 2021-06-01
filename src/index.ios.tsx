@@ -1,4 +1,4 @@
-import { TurboModuleRegistry } from 'react-native-tscodegen-types';
+import { NativeModules } from 'react-native';
 import type { TurboModule } from 'react-native-tscodegen-types';
 
 export interface Spec extends TurboModule {
@@ -9,7 +9,6 @@ export interface Spec extends TurboModule {
   addListener(cb: (name: string) => void): void;
 }
 
-// NOTE: This file is not using just for codegen reference
-export default TurboModuleRegistry.getEnforcing<Spec>(
-  'MySampleTurboModule'
-) as Spec;
+const { MySampleTurboModule } = NativeModules;
+
+export default MySampleTurboModule as Spec;

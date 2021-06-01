@@ -9,11 +9,6 @@ export default function App() {
       <Text>
         Result:
         {/* @ts-ignore */}
-        {global.mySampleTurboModule?.getString('nutstick') ?? 'not working'}
-      </Text>
-      <Text>
-        Result:
-        {/* @ts-ignore */}
         {TurboModuleSample?.getString('nutstick') ?? 'not working'}
       </Text>
     </View>
